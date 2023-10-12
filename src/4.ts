@@ -12,9 +12,11 @@ class Key {
 
 class Person {
   private key: Key;
+
   constructor(key: Key) {
     this.key = key;
   }
+
   getKey(): Key {
     return this.key;
   }
@@ -22,41 +24,41 @@ class Person {
 
 abstract class House {
   protected door: boolean = false;
-  protected tenants: Person[] = [];
   protected key: Key;
+  protected tenants: Person[] = [];
+
+  abstract openDoor(key: Key): void;
 
   comeIn(person: Person): void {
     if (this.door) {
       this.tenants.push(person);
-      console.log("The door is open. The person has entered the house.");
+      console.log("Двері відкриті. Людина увійшла в будинок.");
     } else {
-      console.log("The door is closed. The person cannot enter the house.");
+      console.log("Двері закриті. Людина не може увійти в будинок.");
     }
   }
-
-  abstract openDoor(key: Key): void;
 }
 
 class MyHouse extends House {
-  constructor() {
-    super();
-    this.key = new Key();
-  }
-
   openDoor(key: Key): void {
     if (key.getSignature() === this.key.getSignature()) {
       this.door = true;
-      console.log("The door is open.");
+      console.log("Двері відчинені.");
     } else {
-      console.log("The door remains closed. Incorrect key.");
+      console.log("Двері залишаються закритими. Неправильний ключ.");
     }
+  }
+
+  setKey(key: Key): void {
+    this.key = key;
   }
 }
 
+const key = new Key();
 const house = new MyHouse();
-const person = new Person(new Key());
+const person = new Person(key);
+
+house.setKey(key);
 
 house.openDoor(person.getKey());
 house.comeIn(person);
-
-export {};
